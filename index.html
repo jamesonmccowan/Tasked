@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=medium-dpi" />
+        <title>Tasked</title>
+        <link type="text/css" rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+        <link type="text/css" rel="stylesheet" href="css/index.css" />
+        <style type="text/css">
+            #onhold {display: none;}
+            #completed {display: none;}
+        </style>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.4.2.js"></script>
+    </head>
+    <body>
+        <div id="header" data-role="header"  data-position="fixed" data-tap-toggle="false">
+            <h1>Tasked</h1>
+            <a href="options.html" data-icon="gear" class="ui-btn-right">Options</a>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#" data-icon="check" data-iconpos="bottom" class="ui-btn-active" onclick='$("#current").show();$("#onhold").hide();$("#completed").hide();'>Current</a></li>
+                    <li><a href="#" data-icon="recycle" data-iconpos="bottom" onclick='$("#current").hide();$("#onhold").show();$("#completed").hide();'>On Hold</a></li>
+                    <li><a href="#" data-icon="star" data-iconpos="bottom" onclick='$("#current").hide();$("#onhold").hide();$("#completed").show();'>Completed</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="body">
+            <div id="current" class="ui-body-d ui-content">
+                <ul data-role="listview" data-icon="carat-r" data-filter="true" data-filter-placeholder="Search Tasks..." data-inset="true">
+                    <li><a href="task.html">Apple</a></li>
+                    <li><a href="task.html">Banana</a></li>
+                    <li><a href="task.html">Cherry</a></li>
+                    <li><a href="task.html">Cranberry</a></li>
+                    <li><a href="task.html">Grape</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                </ul>
+            </div>
+            <div id="onhold" class="ui-body-d ui-content">
+                <ul data-role="listview" data-icon="carat-r" data-filter="true" data-filter-placeholder="Search Tasks..." data-inset="true">
+                    <li><a href="task.html">Car</a></li>
+                    <li><a href="task.html">House</a></li>
+                    <li><a href="task.html">Boat</a></li>
+                    <li><a href="task.html">Pool</a></li>
+                </ul>
+            </div>
+            <div id="completed" class="ui-body-d ui-content">
+                <ul data-role="listview" data-icon="carat-r" data-filter="true" data-filter-placeholder="Search Tasks..." data-inset="true">
+                    <li><a href="task.html">Apple</a></li>
+                    <li><a href="task.html">Banana</a></li>
+                    <li><a href="task.html">Cherry</a></li>
+                    <li><a href="task.html">Cranberry</a></li>
+                    <li><a href="task.html">Grape</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                    <li><a href="task.html">Orange</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="footer" data-role="footer"  data-position="fixed" data-tap-toggle="false">
+            <a href="#popupNew" data-icon="plus" data-iconpos="bottom" data-rel="popup" data-position-to="window" data-transition="pop" style="display: block;"
+            onclick='$("#ntitle").val("");$("#ncontent").val("");'>New</a>
+        </div>
+
+        <div data-role="popup" id="popupNew" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+            <div data-role="header" data-theme="a">
+                <h1>Create New Task</h1>
+            </div>
+            <div style="padding: 10px;">
+                <input id="ntitle" value="" data-theme="a" placeholder="Title"/>
+                <textarea id="ncontent" data-theme="a" placeholder="Description"></textarea>
+            </div>
+            <div role="main" class="ui-content">
+                <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Create</a>
+                <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+            </div>
+        </div>
+    </body>
+</html>
