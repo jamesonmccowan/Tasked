@@ -933,10 +933,10 @@ html .ui-alt-icon .ui-radio-off:after {
 html .ui-bar-a .ui-bar-inherit,
 html .ui-body-a .ui-bar-inherit,
 html body .ui-group-theme-a .ui-bar-inherit {
-	background-color: 			#e9e9e9 /*{a-bar-background-color}*/;
+	background-color: 		#B7110A /*{a-bar-background-color}*/;
 	border-color:	 		#ddd /*{a-bar-border}*/;
-	color: 					#333 /*{a-bar-color}*/;
-	text-shadow: 0 /*{a-bar-shadow-x}*/ 1px /*{a-bar-shadow-y}*/ 0 /*{a-bar-shadow-radius}*/ 	#eee /*{a-bar-shadow-color}*/;
+	color: 					#fff /*{a-bar-color}*/;
+	text-shadow: 0 /*{a-bar-shadow-x}*/ 1px /*{a-bar-shadow-y}*/ 0 /*{a-bar-shadow-radius}*/ 	#333 /*{a-bar-shadow-color}*/;
 	font-weight: bold;
 }
 .ui-bar-a {
