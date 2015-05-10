@@ -6,13 +6,14 @@ var color = {
     white : "#fff",
     gold : "#FFE85F", //"gold radial-gradient(lightyellow, gold)",
 }
-
+var started = 0;
 function listSelect (cat) {
     var hash = {
         "Open" : 1,
         "On Hold" : 2,
         "Completed" : 3
     };
+    started = 1;
 
     cat = cat||window.localStorage.getItem("cat");
     window.localStorage.setItem("cat", cat);
@@ -58,8 +59,13 @@ var tasks = {
             $("#holdInfo").html("");
             $("#state").parent().css({"color":"black", "background" : color.gold});
         }
+        if (this.persist.start) {
+            $("#persistInfo").html("<hr />Persist Start: " + ((new Date(this.persist.start).toDateString())) + "<br />Persist Interval: " + this.persist.duration);
+        } else {
+            $("#persistInfo").html("");
+        }
     },
-    "new" : function (title, desc, state, hold) {
+    "new" : function (title, desc, state, hold, persist) {
         var task = {
             title : title,
             description : desc,
@@ -70,10 +76,15 @@ var tasks = {
                 start : null,
                 duration : null,
             },
+            persist : persist||{
+                start : null,
+                duration : null,
+            },
             display : tasks._display,
         };
         this.list.push(task);
         this.save();
+        return task;
     },
     "delete" : function (task) {
         var index = this.list.lastIndexOf(task);
@@ -82,7 +93,7 @@ var tasks = {
         }
         this.save();
     },
-    "edit" : function (task, title, desc, state, hold) {
+    "edit" : function (task, title, desc, state, hold, persist) {
         var t = task;//this.list[index];
         if (title)
             t.title = title;
@@ -92,7 +103,9 @@ var tasks = {
             t.state = state;
         if (hold)
             t.hold = hold;
-            t.modified = (new Date()).getTime();
+        if (persist)
+            t.persist = persist;
+        t.modified = (new Date()).getTime();
         this.save();
     },
     "get" : function (query) {
@@ -179,6 +192,61 @@ var tasks = {
         }
         return start.getTime() + num < now.getTime();
     },
+    "checkPersists" : function () {
+        var l = this.get(function (row) { // get all persists
+            return (row.state != "Open" && row.persist.start != null)?true:false;
+        });
+        var change = false;
+        var now = (new Date()).getTime();
+        for (var i=0;i<l.length;i++) {
+            var reopen = this.PersistReopenAt(l[i])
+            if (reopen > now) { // check them
+                var p = {
+                    start : reopen,
+                    duration : this.persist.duration,
+                };
+                this.edit(l[i], null, null, "Open", null, p); // edit the ones that are passed hold time
+                change = true;
+            }
+        }
+        return change;
+    },
+    // returns true if this task shouldn't be on hold
+    "PersistReopenAt" : function (t) {
+        var start = new Date(t.persist.start);
+        var num = parseInt(t.persist.duration.substr(1));
+        var unit = t.persist.duration.substr(0,1);
+        switch (unit) {
+            case "H": // hours
+                start.setHours(start.getHours()+(start.getMinutes()>30?1:0), 0, 0, 0);
+                num *= 1000*60*60;
+                break;
+            case "D": // days
+                start.setDate(start.getDate()+(start.getHours()<4?-1:0));
+                start.setHours(0, 0, 0, 0);
+                num *= 1000*60*60*24;
+                break;
+            case "W": // weeks
+                start.setDate(start.getDate()+(start.getHours()<4?-1:0));
+                start.setHours(0, 0, 0, 0);
+                num *= 1000*60*60*24*7;
+                break;
+            case "M": // months
+                start.setMonth(start.getMonth()+num);
+                start.setHours(0, 0, 0, 0);
+                num = 0;
+                break;
+            case "Y": // years
+                start.setFullYear(start.getFullYear()+num);
+                start.setHours(0, 0, 0, 0);
+                num = 0;
+                break;
+            case "I": // infinite
+                return false;
+        }
+        return start.getTime() + num;
+    },
+
     "init" : function () {
         this.load();
     },
@@ -195,12 +263,18 @@ function fadeMessage (str) {
         });
 }
 
-
+function onCheckboxChange () {
+    var task = getTask();
+    if (task != null) {
+        task.description = fromDisp(document.getElementById("dcontent"));
+        tasks.save();
+    }
+}
 
 function toDisp (str) {
     str = str.replace(/\n/g, '<br />');
-    str = str.replace(/\[]/g, '<input type="checkbox" />');
-    str = str.replace(/\[x]/gi, '<input type="checkbox" checked>');
+    str = str.replace(/\[]/g, '<input type="checkbox" onchange="onCheckboxChange()" />');
+    str = str.replace(/\[x]/gi, '<input type="checkbox" onchange="onCheckboxChange()" checked>');
     return str;
 }
 
@@ -220,14 +294,52 @@ function fromDisp (dom) {
 
 function setEdit() {
     var task = getTask();
-    task.description = fromDisp(document.getElementById("dcontent"));
+    $("#estats").show();
     $("#etitle").val(task.title);
     $("#econtent").val(task.description);
+    if (task.persist.start) {
+        $("#epersist").prop("checked", true);
+        $("#eptoggle").show();
+        var start = new Date(task.persist.start);
+        $("#epdate").val((start.getMonth()+1) + '/' + start.getDate() + '/' + start.getFullYear());
+        $("#epersistValue").val(task.persist.duration.substr(1));
+        $("#epersistType").val(task.persist.duration.substr(0,1));
+    } else {
+        $("#epersist").attr("checked", false);
+        $("#eptoggle").hide();
+        var now = new Date();
+        $("#epdate").trigger('datebox', {'method':'set', 'value':(now.getMonth()+1) + '/' + now.getDate() + '/' + now.getFullYear()});
+        $("#epersistValue").val("1");
+        $("#epersistType").val("D");
+    }
+    $('#editFooter').html("Edit");
+}
+function setNew () {
+    $("#epersist").attr("checked", false);
+    $("#etitle").val("");
+    $("#econtent").val("");
+    $("#eptoggle").hide();
+    var now = new Date();
+    $("#epdate").trigger('datebox', {'method':'set', 'value':(now.getMonth()+1) + '/' + now.getDate() + '/' + now.getFullYear()});
+    $("#epersistValue").val("1");
+    $("#epersistType").val("D");
+    $('#editFooter').html("New");
 }
 
 function edit () {
     var task = getTask();
-    tasks.edit(task, $("#etitle").val(), $("#econtent").val())
+    var date = $('#epdate').val().split('/'); // 12/21/2015
+    date = new Date(parseInt(date[2], 10), parseInt(date[0], 10)-1, parseInt(date[1], 10)).getTime();
+    var duration = $('#epersistType').val() + parseInt($('#epersistValue').val(), 10);
+    var persist = {
+        start : $('#epersist').prop('checked')?date:null,
+        duration : $('#epersist').prop('checked')?duration:null,
+    };
+    if (task != null && typeof task.title != "undefined") {
+        tasks.edit(task, $("#etitle").val(), $("#econtent").val(), null, null, persist);
+    } else {
+        task = tasks.new($("#etitle").val(), $("#econtent").val(), null, null, persist);
+    }
     task.display();
 }
 
@@ -394,8 +506,13 @@ $(document).on("pageinit", "#occasions", loaded);
 */
 
 $(document).on("pageinit", "#indexPage", function () {
+    jQuery.extend(jQuery.mobile.datebox.prototype.options, {
+        'overrideDateFormat': '%d.%m.%Y',
+    });
+
     tasks.init();
     listSelect("Open");
+
 });
 $(document).on("pageshow", "#indexPage", function () {
     $("#n"+window.localStorage.getItem("nid")).addClass("ui-btn-active");
@@ -416,4 +533,13 @@ $(document).on("pageinit", "#taskPage", function () {
         task.display = tasks._display;
         task.display();
     }
+});
+
+$(document).on("pageinit", "#taskEdit", function () {
+    if (started == 0)
+        $.mobile.changePage("#indexPage");
+    $("#epersist").checkboxradio("refresh");
+});
+$(document).on("pageshow", "#taskEdit", function () {
+    $("#epersist").checkboxradio("refresh");
 });

@@ -7,10 +7,13 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=medium-dpi" />
         <title>Tasked</title>
         <link type="text/css" rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+        <link type="text/css" rel="stylesheet" href="css/jqm-datebox-1.4.2.css" />
         <link type="text/css" rel="stylesheet" href="css/index.css" />
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.2.js"></script>
+        <script type="text/javascript" src="js/jqm-datebox-1.4.2.core.js"></script>
+        <script type="text/javascript" src="js/jqm-datebox-1.4.2.mode.datebox.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </head>
     <body>
@@ -35,33 +38,18 @@
             </div>
 
             <div data-role="footer"  data-position="fixed" data-tap-toggle="false">
-                <a href="#popupNew" data-icon="plus" data-iconpos="bottom" data-rel="popup" data-position-to="window" data-transition="pop" style="display: block;"
-                onclick='$("#ntitle").val("");$("#ncontent").val("");'>New</a>
-            </div>
-
-            <div data-role="popup" id="popupNew" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-                <div data-role="header" data-theme="a">
-                    <h1>New Task</h1>
-                </div>
-                <div style="padding: 10px;">
-                    <input id="ntitle" value="" data-theme="a" placeholder="Title"/>
-                    <textarea id="ncontent" data-theme="a" placeholder="Description"></textarea>
-                </div>
-                <div role="main" class="ui-content">
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow" onclick='tasks.new($("#ntitle").val(), $("#ncontent").val());listSelect();'>Create</a>
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
-                </div>
+                <a href="#taskEdit" data-icon="plus" data-iconpos="bottom" style="display: block;"  onclick="setNew()">New</a>
             </div>
         </div>
 
         <!-- Task -->
         <div id="taskPage" data-role="page">
-            <div id="header" data-role="header"  data-position="fixed" data-tap-toggle="false">
+            <div data-role="header"  data-position="fixed" data-tap-toggle="false">
                 <h1>Tasked</h1>
                 <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
                 <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
             </div>
-            <div id="body" style="padding: 0px 10px;">
+            <div style="padding: 0px 10px;">
                 <div id="display">
                     <h1 id="dtitle">Title</h1>
                     <table id="stats"><tr>
@@ -70,15 +58,15 @@
                             <td>Task Is<br /><span id="state">Open</td>
                     </tr></table>
                     <div id="dcontent">Text content for the task</div>
+                    <div id="persistInfo"></div>
                     <div id="holdInfo"></div>
                 </div>
             </div>
 
-            <div id="footer" data-role="footer" data-position="fixed">
+            <div data-role="footer" data-position="fixed">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#popupEdit" data-rel="popup" data-position-to="window" data-transition="pop"
-                            onclick='setEdit()'>Edit</a></li>
+                        <li><a href="#taskEdit" data-position-to="window" onclick="setEdit()">Edit</a></li>
                         <li><a href="#popupHold" data-rel="popup" data-position-to="window" data-transition="pop"
                             onclick='setHold()' id="btnHold">Hold</a></li>
                         <li><a href="#popupDelete" data-rel="popup" data-position-to="window" data-transition="pop">Delete</a></li>
@@ -87,26 +75,13 @@
                 </div>
             </div>
 
-            <div data-role="popup" id="popupEdit" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-                <div data-role="header" data-theme="a">
-                    <h1>Edit Task</h1>
-                </div>
-                <div role="main" class="ui-content">
-                    <input id="etitle" value="Title" />
-                    <textarea id="econtent">Text content for the task</textarea>
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow" onclick="edit()">Edit</a>
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
-                </div>
-            </div>
-
-
             <div data-role="popup" id="popupHold" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
                 <div data-role="header" data-theme="a">
                     <h1>Hold Task</h1>
                 </div>
                 <div role="main" class="ui-content">
                     <p>How long should this be put on hold?</p>
-                    <input value="0" type="number" id="holdValue" />
+                    <input value="1" min="1" type="number" id="holdValue" />
                     <select id="holdType">
                         <option value="H">Hours</option>
                         <option value="D">Days</option>
@@ -130,7 +105,6 @@
                     <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
                 </div>
             </div>
-
 
             <div data-role="popup" id="popupDelete" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
                 <div data-role="header" data-theme="a">
@@ -164,6 +138,40 @@
                     <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow" onclick="reopen()">Reopen</a>
                     <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
                 </div>
+            </div>
+        </div>
+
+        <!-- New / Edit -->
+        <div id="taskEdit" data-role="page">
+            <div data-role="header"  data-position="fixed" data-tap-toggle="false">
+                <h1>Tasked</h1>
+                <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
+                <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
+            </div>
+            <div style="padding: 0px 10px;">
+                <div id="display">
+                    <input id="etitle" data-theme="a" placeholder="Title"/>
+                    <textarea id="econtent" data-theme="a" placeholder="Description"></textarea>
+                    <input id="epersist" data-theme="a" type="checkbox"
+                        onclick="if($('#epersist').prop('checked')) {$('#eptoggle').show();} else {$('#eptoggle').hide();}" />
+                    <label for="epersist">Persistent Task</label>
+                    <div id="eptoggle">
+                        <sub>Start:</sub>
+                        <input id="epdate" data-theme="a" type="date" data-role="datebox"
+                            data-options='{"mode": "datebox", "overrideDateFormat": "%m/%d/%Y"}' />
+                        <sub>Interval:</sub>
+                        <input value="1" min="1" type="number" id="epersistValue" />
+                        <select id="epersistType">
+                            <option value="D">Days</option>
+                            <option value="W">Weeks</option>
+                            <option value="M">Months</option>
+                            <option value="Y">Years</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div data-role="footer"  data-position="fixed" data-tap-toggle="false">
+                <a href="#taskPage" id="editFooter" data-icon="edit" data-iconpos="bottom" style="display: block;" onclick="edit()">Save</a>
             </div>
         </div>
 
