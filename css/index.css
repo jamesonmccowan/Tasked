@@ -16,8 +16,20 @@
     padding: 0px 10px;
     clear: both;}
 
-#dcontent input[type=checkbox] {
+#dcontent input[type=checkbox], .help-list li input[type=checkbox] {
   transform: scale(1.5);
   -webkit-transform: scale(1.5);
+}
+.help-list {
+    padding: 0px;
+}
+.help-list li {
+    list-style-type: none;
+}
+.help-list li ul li {
+    list-style-type: disc;
+}
+.help-list li ol li {
+    list-style-type: decimal;
 }
 

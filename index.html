@@ -11,6 +11,8 @@
         <link type="text/css" rel="stylesheet" href="css/index.css" />
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.2.js"></script>
         <script type="text/javascript" src="js/jqm-datebox-1.4.2.core.js"></script>
         <script type="text/javascript" src="js/jqm-datebox-1.4.2.mode.datebox.js"></script>
@@ -22,11 +24,12 @@
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Tasked</h1>
                 <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
+                <a href="#helpPage" data-icon="info" class="ui-btn-left">Help</a>
                 <div data-role="navbar">
                     <ul class="ui-state-persist">
-                        <li><a href="#" data-icon="check" data-iconpos="bottom" class="ui-btn-active" onclick='listSelect("Open")' id="n1">Current</a></li>
-                        <li><a href="#" data-icon="recycle" data-iconpos="bottom" class="" onclick='listSelect("On Hold")'  id="n2">On Hold</a></li>
-                        <li><a href="#" data-icon="star" data-iconpos="bottom" class="" onclick='listSelect("Completed")'  id="n3">Completed</a></li>
+                        <li><a href="#" data-icon="check" data-iconpos="bottom" class="ui-btn-active" onclick='displayList("Open")' id="n1">Current</a></li>
+                        <li><a href="#" data-icon="recycle" data-iconpos="bottom" class="" onclick='displayList("On Hold")'  id="n2">On Hold</a></li>
+                        <li><a href="#" data-icon="star" data-iconpos="bottom" class="" onclick='displayList("Completed")'  id="n3">Completed</a></li>
                     </ul>
                 </div>
             </div>
@@ -37,8 +40,18 @@
                 </div>
             </div>
 
-            <div data-role="footer"  data-position="fixed" data-tap-toggle="false">
-                <a href="#taskEdit" data-icon="plus" data-iconpos="bottom" style="display: block;"  onclick="setNew()">New</a>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li>
+                            <a href="#taskEdit" data-icon="plus" data-iconpos="bottom" style="display: block;" onclick="setNew()">New</a>
+                        </li>
+                        <li>
+                            <input id="sortable" data-theme="a" type="checkbox" onclick="toggleSort()" />
+                            <label for="sortable">Sortable</label>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -47,6 +60,7 @@
             <div data-role="header"  data-position="fixed" data-tap-toggle="false">
                 <h1>Tasked</h1>
                 <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
+                <a href="#helpPage" data-icon="info" class="ui-btn-left">Help</a>
                 <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
             </div>
             <div style="padding: 0px 10px;">
@@ -146,6 +160,7 @@
             <div data-role="header"  data-position="fixed" data-tap-toggle="false">
                 <h1>Tasked</h1>
                 <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
+                <a href="#helpPage" data-icon="info" class="ui-btn-left">Help</a>
                 <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
             </div>
             <div style="padding: 0px 10px;">
@@ -171,7 +186,7 @@
                 </div>
             </div>
             <div data-role="footer"  data-position="fixed" data-tap-toggle="false">
-                <a href="#taskPage" id="editFooter" data-icon="edit" data-iconpos="bottom" style="display: block;" onclick="edit()">Save</a>
+                <a href="#taskPage" id="editFooter" data-icon="edit" data-iconpos="bottom" style="display: block;">Save</a>
             </div>
         </div>
 
@@ -180,6 +195,7 @@
             <div data-role="header"  data-position="fixed" data-tap-toggle="false">
                 <h1>Tasked</h1>
                 <a href="#optionsPage" data-icon="gear" class="ui-btn-right" style="visibility: hidden;">Options</a>
+                <a href="#helpPage" data-icon="info" class="ui-btn-left">Help</a>
                 <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
             </div>
             <div style="padding: 0px 10px;">
@@ -202,5 +218,215 @@
             </div>
         </div>
 
+
+        <!-- Help -->
+        <div id="helpPage" data-role="page">
+            <div data-role="header"  data-position="fixed" data-tap-toggle="false">
+                <h1>Tasked</h1>
+                <a href="#optionsPage" data-icon="gear" class="ui-btn-right">Options</a>
+                <a href="#helpPage" data-icon="info" class="ui-btn-left" style="visibility: hidden;">Help</a>
+                <a href="#indexPage" data-icon="carat-l" data-iconpos="left" class="ui-alt-icon ui-nodisc-icon ui-shadow ui-corner-all ui-btn-b ui-icon-carat-l ui-btn-icon-left" style="display: block;">Back to List</a>
+            </div>
+            <div style="padding: 0px 10px;">
+                <ul data-role="collapsible-set" data-icon="carat-r" data-filter="true"
+                     data-filter-placeholder="Search Help..." data-inset="true" class="help-list">
+                   <li data-role="collapsible" >
+                       <h3>What Is Tasked?</h3>
+                       <p>
+                            Tasked is a To-do list app with several features to help make it more useful.
+                            Those features include:
+                            <ul>
+                                <li>Searchable Entries</li>
+                                <li>Sortable Entries</li>
+                                <li>Check Boxes so you can check off steps in multi-step tasks.</li>
+                                <li>Persistence options for making a task appear anywhere from every day to once a year.</li>
+                                <li>Hold options for taking a task off the main list for a set duration so you don't have to look at tasks you can't currently work on.</li>
+                           </ul>
+                       </p>
+                   </li>
+                    <li data-role="collapsible">
+                        <h3>Creating a New Task</h3>
+                        <p>
+                            <ol>
+                                <li>
+                                    Press the "New" button at the bottom of the <a href="#indexPage">List</a> screen.<br />
+                                    This will display the form used to create new Tasks.<br />
+                                    If the "New" button is not shown on the screen, taping the screen should make it appear.
+                                </li>
+                                <li>
+                                    Fill out the form that appears<br />
+                                </li>
+                                <li>
+                                    Press "Save".<br />
+                                    This should create a new task and display it for you.
+                                </li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Editing a Task</h3>
+                        <p>
+                            You can edit an entry even if it is encrypted.
+                            But if it is encrypted, you can only see and edit the title and description.
+                            <ol>
+                                <li>
+                                    From the <a href="#indexPage">List</a> screen, Click on the entry you want to edit.
+                                    This will display the specific entry.
+                                </li>
+                                <li>
+                                    Optional: Decrypt the entry before editing it so that the password and encrypted content can be edited.
+                                    Press the "Decrypt" button on the bottom of the screen and enter the correct password for this entry into the popup.
+                                </li>
+                                <li>
+                                    From the Entry's Display screen, press the "Edit" button at the bottom of the screen.
+                                    This will bring you to the edit screen for the specific entry.
+                                </li>
+                                <li>
+                                    In the edit screen, change the entry to your liking, then press "Save".<br />
+                                    The only requirement for the form is that the two password fields match.
+                                    If you leave the password fields blank, the entry's password will not change.
+                                </li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Tasked Markup</h3>
+                        <p>
+                            Tasks currently support one markup feature in their description.<br />
+                            <br />
+                            <b>Check Box:</b> This is a simple box that can either be checked or unchecked.<br />
+                            <table>
+                                <tr>
+                                    <th>Form Input</th>
+                                    <th>Entry Display</th>
+                                </tr>
+                                <tr>
+                                    <td><textarea id="td_sample_in" READONLY/>[x] Get mail
+[] Check email</textarea></td>
+                                    <td id="td_sample_out">
+                                        <table>
+                                            <tr>
+                                                <td style="width: 0.8cm;"><input type="checkbox" checked /></td>
+                                                <td>Get mail</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" /></td>
+                                                <td>Check email</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Clompleting and Reopening Tasks</h3>
+                        <p>
+                            Completed Tasks moved to the Completed tab of the <a href="#indexPage">List</a> screen.<br />
+                            <br />
+                            <b>Completing a Task:</b><br />
+                            To complete a Task, starting from the <a href="#indexPage">List</a> screen, Click on the Task you want to complete.<br />
+                            In the Task's display screen. press the "Complete" button at the bottom of the screen.<br />
+                            Press the "Complete" button in the resulting Popup dialog to confirm completion.<br />
+                            The Task will now only appear under the Completed Tasks tab.<br />
+                            <br />
+                            <b>Reopening a Task:</b><br />
+                            To reopen a Task, starting from the <a href="#indexPage">List</a> screen, Click on the Task you want to reopen.<br />
+                            In the Task's display screen. press the "Reopen" button at the bottom of the screen.<br />
+                            Press the "Reopen" button in the resulting Popup dialog to confirm Reopening.<br />
+                            The Task will now appear under the Current Tasks tab.
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Tasks on Hold</h3>
+                        <p>
+                            Tasks on hold are temporarily or permenently moved to the On Hold tab of the <a href="#indexPage">List</a> screen.<br />
+                            <br />
+                            <b>Putting a Task on Hold:</b><br />
+                            starting from the <a href="#indexPage">List</a> screen, Click on the Task you want to put on hold.<br />
+                            In the Task's display screen. press the "Hold" button at the bottom of the screen.<br />
+                            In the resulting Popup dialog, set the duration of the hold, then press "Hold" to confirm.<br />
+                            The Task will now only appear under the On Hold Tasks tab, until the duration of the hold has expired.<br />
+                            <br />
+                            <b>Ending a Hold on a Task:</b><br />
+                            To end a Task's hold, starting from the <a href="#indexPage">List</a> screen, Click on the Task you want to end the hold on.<br />
+                            In the Task's display screen. press the "End Hold" button at the bottom of the screen.<br />
+                            Press the "End Hold" button in the resulting Popup dialog to confirm Reopening.<br />
+                            The Task will now appear under the Current Tasks tab.
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Persistent Tasks</h3>
+                        <p>
+                            A Persistent Task is one that automatically Reopens itself on a specified interval.
+                            It is meant for Tasks that you want to do once every week, month, or year.<br />
+                            <br />
+                            A task can be made persistent from the form used to create new Tasks, or the edit form. The process is the same from each.<br />
+                            Check the "Persistent Task" checkbox. This will cause other options to appear.<br />
+                            Set the day you want the task to start persisting from.
+                            For example, if you want to do something every Sunday, set the start date to a Sunday.<br />
+                            Set the Interval. For example, a weekly Task would be 1 weeks.<br />
+                            Save these settings by pressing "Save".
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Deleting Tasks</h3>
+                        <p>
+                            Deleting a Task erases all record of that task from the app's memory.<br />
+                            <br />
+                            <b>Deleting Individual Tasks:</b><br />
+                            To delete a specific Task, starting from the <a href="#indexPage">List</a> screen, Click on the Task you want to delete.<br />
+                            In the Task's display screen, press the "Delete" button at the bottom of the screen.<br />
+                            Press the "Delete" button in the resulting Popup dialog to confirm deletion.<br />
+                            <br />
+                            <b>Deleting All Entries:</b><br />
+                            Go to the <a href="#optionsPage">Options</a> page at the top right corner of the screen.<br />
+                            The last option in the options page is "Delete All Tasks", press it and press "Delete" on the resulting popup.
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                       <h3>Searching</h3>
+                       <p>
+                            You can search from the <a href="#indexPage">List</a> screen.
+                            The search bar is just below the Tasked state tabs and just above the list of Tasks.<br />
+                            <br />
+                            Searches currently only search by Task titles.<br />
+                            Searches still apply when switching which Tasked State tab you're looking under.
+                        </p>
+                   </li>
+                    <li data-role="collapsible">
+                        <h3>Sorting Tasks</h3>
+                        <p>From the <a href="#indexPage">List</a> screen,
+                        make sure the "Sortable" checkbox at the end of the screen, then drag and drop the Tasks into place.<br />
+                        <br />
+                        If the checkbox is not shown on the screen, taping the screen should make it appear.</p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Sorting Entries</h3>
+                        <p>From the <a href="#indexPage">List</a> screen,
+                        make sure the "Sortable" checkbox at the end of the screen, then drag and drop the Tasks into place.<br />
+                        <br />
+                        If the checkbox is not shown on the screen, taping the screen should make it appear.</p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Save to File</h3>
+                        <p>
+                            On the <a href="#optionsPage">Options</a> page, press the "Save to File" button.
+                            This will save a file to "Tasked/Tasked.txt" on your device.<br />
+                            It is hoped that a file dialog that lets you navigate and choose where to save this file can be implemented some day.
+                        </p>
+                    </li>
+                    <li data-role="collapsible">
+                        <h3>Load from File</h3>
+                        <p>
+                            On the <a href="#optionsPage">Options</a> page, press the "Load from File" button.
+                            This will load a file from "Tasked/Tasked.txt" on your device.<br />
+                            It is hoped that a file dialog that lets you navigate and choose what file to load can be implemented some day.<br />
+                            <u>Warning:</u> This will erase all existing Tasks and replace them with the ones from the file.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </body>
 </html>
