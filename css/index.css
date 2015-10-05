@@ -17,9 +17,22 @@
     clear: both;}
 
 #dcontent input[type=checkbox], .help-list li input[type=checkbox] {
-  transform: scale(1.5);
-  -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+    -webkit-transform: scale(1.5);
 }
+
+/* sometimes the UI puts a special div around the checkboxes, sometimes it doesn't.
+   we have to compensate for the resulting mis-stylings here */
+#dcontent .ui-checkbox, .help-list li .ui-checkbox {
+    margin: 0px;
+    display: inline;}
+#dcontent .ui-checkbox input, .help-list li .ui-checkbox input {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin: 0px;}
+/* end of mis-stylings compensation */
+
 .help-list {
     padding: 0px;
 }

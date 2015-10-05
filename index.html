@@ -292,9 +292,10 @@
                     <li data-role="collapsible">
                         <h3>Tasked Markup</h3>
                         <p>
-                            Tasks currently support one markup feature in their description.<br />
+                            Tasks currently support two markup features in their description.<br />
                             <br />
                             <b>Check Box:</b> This is a simple box that can either be checked or unchecked.<br />
+                            <b>Horizontal Bar:</b> a dividing bar, needs a newline after three -<br />
                             <table>
                                 <tr>
                                     <th>Form Input</th>
@@ -302,12 +303,16 @@
                                 </tr>
                                 <tr>
                                     <td><textarea id="td_sample_in" READONLY/>[x] Get mail
+---
 [] Check email</textarea></td>
                                     <td id="td_sample_out">
                                         <table>
                                             <tr>
                                                 <td style="width: 0.8cm;"><input type="checkbox" checked /></td>
                                                 <td>Get mail</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><hr /></td>
                                             </tr>
                                             <tr>
                                                 <td><input type="checkbox" /></td>

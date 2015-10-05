@@ -139,7 +139,7 @@ var tasks = {
     },
     "checkPersists" : function () {
         var l = this.get(function (row) { // get all persists
-            return (row.state != "Open" && row.persist.start != null)?true:false;
+            return (row.state == "Complete" && row.persist.start != null)?true:false;
         });
         var change = false;
         var now = (new Date()).getTime();
@@ -293,6 +293,8 @@ function onCheckboxChange () {
 
 // convert a task's description into display format
 function toDisp (str) {
+    str = str.replace(/<[^>]*>/g, ''); // remove html tags
+    str = str.replace(/---\n/g, '<hr />');
     str = str.replace(/\n/g, '<br />');
     str = str.replace(/\[]/g, '<input type="checkbox" onchange="onCheckboxChange()" />');
     str = str.replace(/\[x]/gi, '<input type="checkbox" onchange="onCheckboxChange()" checked>');
@@ -303,7 +305,11 @@ function toDisp (str) {
 function fromDisp (dom) {
     var str = dom.innerHTML;
     str = str.replace(/<br ?\/?>/gi, '\n')
+    str = str.replace(/<hr ?\/?>/gi, '---\n')
     str = str.split(/<input [^>]*>/gi);
+    for (var i=0;i<str.length;i++) {
+       str[i] = str[i].replace(/<[^>]*>/g, ''); // remove all remaining html tags
+    }
 
     var ret = "";
     var checkboxes = dom.getElementsByTagName("input");
@@ -340,6 +346,7 @@ function setEdit() {
         $("#epersistType").val("D");
     }
     $('#editFooter')[0].onclick = function () {getEdit();};
+    $("#epersist").checkboxradio("refresh");
 }
 
 // Set up New/Edit page to creat a new task
@@ -624,6 +631,7 @@ $(document).on("pageinit", "#indexPage", function () {
             }
         })
     });
+
     displayList("Open");
 });
 
