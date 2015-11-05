@@ -139,7 +139,7 @@ var tasks = {
     },
     "checkPersists" : function () {
         var l = this.get(function (row) { // get all persists
-            return (row.state == "Complete" && row.persist.start != null)?true:false;
+            return (row.state == "Completed" && row.persist.start != null)?true:false;
         });
         var change = false;
         var now = (new Date()).getTime();
